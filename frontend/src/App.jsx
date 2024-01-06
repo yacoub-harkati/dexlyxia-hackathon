@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Container from "./components/Container";
+import FirstPage from "./Pages/firstPage";
+import SecondPage from "./Pages/secondPage";
+import ThirdPage from "./Pages/thirdPage";
+import FourthPage from "./Pages/fourthPage";
+import Header from "./components/Header";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [state, setState] = useState({
+    childName: null,
+    birthDay: null,
+    score: 0,
+    isMuted: false,
+    recording: false,
+    currentPage: 2,
+    theme: "max",
+  });
+
+  function handleButtonClick() {
+    if (state.childName !== null && state.birthDay !== null) {
+      if (state.currentPage == 3) {
+        setState({ ...state, currentPage: state.currentPage + 1 });
+        console.log(state);
+        return;
+      }
+      setState({ ...state, currentPage: state.currentPage + 1 });
+    }
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div
+      className={`h-screen ${
+        state.currentPage < 2
+          ? "bg-patterns bg-cover"
+          : `${
+              state.theme === "max"
+                ? "radial-max"
+                : state.theme === "luna"
+                ? "radial-luna"
+                : "bg-patterns"
+            } bg-slate-50`
+      }`}
+    >
+      {state.currentPage >= 2 && <Header state={state} setState={setState} />}
+      <Container>
+        {state.currentPage === 0 && (
+          <FirstPage
+            state={state}
+            setItem={setState}
+            handleButtonClick={handleButtonClick}
+          />
+        )}
+        {state.currentPage === 1 && (
+          <SecondPage
+            state={state}
+            setItem={setState}
+            handleButtonClick={handleButtonClick}
+          />
+        )}
+        {state.currentPage === 2 && (
+          <ThirdPage
+            state={state}
+            setState={setState}
+            handleButtonClick={handleButtonClick}
+          />
+        )}
+        {state.currentPage === 3 && (
+          <FourthPage
+            state={state}
+            setState={setState}
+            handleButtonClick={handleButtonClick}
+          />
+        )}
+      </Container>
+    </div>
+  );
 }
 
-export default App
+export default App;
