@@ -1,2 +1,3 @@
 venv
 fronend/node_modules
+**/__pycache__

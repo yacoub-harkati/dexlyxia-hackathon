@@ -12,6 +12,13 @@ services:
     build:
       context: ./modelapi/
       target: ${MODE}
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: 1
+    #         capabilities: [gpu]
     volumes:
       - ./modelapi/:/usr/src/app
     command: flask --app server run --port 8000 --host 0.0.0.0 --debug
@@ -27,11 +34,19 @@ services:
     volumes:
       - ./nginx/logs/:/var/log/nginx/
       - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf
-      - ./api/plotter/uploads/:/usr/src/plots
       - ./api/static:/usr/src/static
+      - ./api/media:/usr/src/media/
     ports:
       - 80:80
       - 443:443
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    container_name: whisper
+    environment:
+      - ASR_MODEL=base
+      - ASR_ENGINE=openai_whisper
+    ports:
+      - 9000:9000
 
 
       

@@ -11,6 +11,8 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip \
   && pip install -r requirements.txt
 RUN pip install flask
+# RUN pip install git+https://github.com/openai/whisper.git
+# RUN apt update && apt install ffmpeg
 COPY . .
 
 EXPOSE 8000
