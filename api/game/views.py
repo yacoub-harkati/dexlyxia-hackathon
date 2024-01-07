@@ -8,6 +8,7 @@ from child.models import Child
 from gtts import gTTS
 from django.http import HttpResponse
 from rest_framework import status
+import requests
 
 
 
@@ -48,11 +49,26 @@ class GameResponseView(APIView):
                 validated_data['response'] = result
                     
                 validated_data['expected_response'] = validated_data['expected_response'].upper() or ''
+                child = Child.objects.get(id=validated_data['child'].id)
                 if result.upper() == validated_data['expected_response']:
                     validated_data['is_correct'] = True
+                    child.score += 5
                 else:
                     validated_data['is_correct'] = False
-
+                    child.score -= 2
+                child.save()
+                if child.number_of_games is None:
+                    child.number_of_games = 1
+                elif child.number_of_games > 10:
+                    try:
+                        child.number_of_games = 0
+                        last_10_records = Game.objects.order_by('-id')[:10]
+                        records_list = list(last_10_records)
+                        response = requests.post('http://modelapi/modelapi', data={'data': records_list})
+                        child.level = response.json()['level'] or 1
+                        child.save()
+                    except Exception as e:
+                        print(e)
             # if serializer.is_valid():
             serializer.save(**validated_data)
             return Response({"is_correct": serializer.data['is_correct']})
@@ -63,9 +79,11 @@ def get_whisper_result(file, filetype):
     import requests
     files = {'audio_file': file}
     response = requests.post('http://whisper:9000/asr', files=files, data={'language': 'en', 'encoding': True, 'task': 'transcription', 'word_timestamps': False,
-                                                                       'output': 'text'})
+                                                                           'output': 'text', 'initial_prompt': 'return the letter corresponding to the audio'})
     result = response.text
-    return result[0]
+    if result[1:] == '.\n':
+        return result[0]
+    return result
 
 
 class CvcView(APIView):

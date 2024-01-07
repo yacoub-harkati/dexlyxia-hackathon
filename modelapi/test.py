@@ -1,9 +1,8 @@
-from flask import Flask, request, jsonify
-# import whisper
 import os
 from sklearn.linear_model import LogisticRegression
 import json
 import numpy as np
+
 
 def load_model():
     np.random.seed(42)
@@ -29,23 +28,14 @@ def load_model():
     model.fit(X, y)
 
     return model
+
 model = load_model()
-app = Flask(__name__)
+result = model.predict(np.array([
+    [3.5, 1, 1],
+    [4.5, 0, 2],
+    [5.5, 1, 3]
+    ]))
 
-@app.route('/modelapi', methods=['POST'])
-def predict():
-    req = request.get_json()
-    print(req['data'])
-    data = req['data'] or []
-    X = np.array(data)
-    print(X)
-    y = model.predict(X)
-    result = int(np.mean(y))
-    return jsonify({"level": result})
+print(result)
+print(int(result.mean()))
 
-
-
-
-@app.route('/modelapi', methods=['GET'])
-def modelapi():
-    return jsonify({'message': 'Hello, World!'})
