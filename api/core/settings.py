@@ -29,9 +29,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     'api',
+    '10.126.77.235'
         ]
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://api']
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://api', 'http://10.126.77.235']
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # FORCE_SCRIPT_NAME = "/api"
@@ -50,7 +51,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'child',
     'game',
+    'corsheaders',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,9 +63,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
