@@ -57,6 +57,9 @@ export default function ThirdPage() {
             <MdOutlineMicNone size={42} className="text-slate-800" />
           )}
         </div>
+        {audioUrl && (
+          <audio src={audioUrl} controls />
+        )}
       </div>
     </div>
   );
