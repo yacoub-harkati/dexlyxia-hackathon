@@ -17,7 +17,7 @@ export default function FirstPage({
         </h2>
         <input
           type="text"
-          className="w-full border border-fuchsia-600 rounded-md p-4 outline-none mt-2 max-w-[400px]"
+          className="w-full border border-fuchsia-600 rounded-md p-4 outline-none mt-2 max-w-[400px] drop-shadow-md"
           placeholder="Enter your child's name"
           onChange={handleChildNameChange}
         ></input>
@@ -27,7 +27,7 @@ export default function FirstPage({
 
         <input
           type="date"
-          className="w-full border border-fuchsia-600 rounded-md p-4 outline-none mt-2 max-w-[250px]"
+          className="w-full border border-fuchsia-600 rounded-md p-4 outline-none mt-2 drop-shadow-md max-w-[250px]"
           onChange={(e) => setState({ ...state, birthDay: e.target.value })}
         ></input>
       </div>

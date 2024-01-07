@@ -16,7 +16,7 @@ export default function SecondPage({
         Choose your avatar
       </h2>
       <div className="flex gap-10 justify-center items-center text-white font-semibold">
-        <div className="w-1/6 space-y-6">
+        <div className="w-1/6 space-y-6 hover:scale-105 transition-all duration-300">
           <div
             className="w-full cursor-pointer h-[180px] "
             onClick={updateTheme}
@@ -28,7 +28,7 @@ export default function SecondPage({
           <div
             onClick={updateTheme}
             data-theme="max"
-            className={`cursor-pointer mx-auto flex justify-center items-center rounded-md text-center py-2 w-20 ${
+            className={`cursor-pointer mx-auto drop-shadow-md flex justify-center items-center rounded-md text-center py-2 w-20 ${
               state.theme === "luna"
                 ? "bg-max border-blue-400"
                 : "bg-blue-500 border-max"
@@ -37,9 +37,9 @@ export default function SecondPage({
             Max
           </div>
         </div>
-        <div className="w-1/6 space-y-6">
+        <div className="w-1/6 space-y-6 hover:scale-105 transition-all duration-300">
           <div
-            className="w-full cursor-pointer h-[180px]"
+            className="w-full cursor-pointer h-[180px] "
             onClick={updateTheme}
             data-theme="luna"
           >
@@ -48,7 +48,7 @@ export default function SecondPage({
           <div
             onClick={updateTheme}
             data-theme="luna"
-            className={`cursor-pointer mx-auto flex justify-center items-center rounded-md text-center py-2 w-20 ${
+            className={`cursor-pointer drop-shadow-md mx-auto flex justify-center items-center rounded-md text-center py-2 w-20 ${
               state.theme === "max"
                 ? " bg-fuchsia-300 border-fuchsia-600"
                 : " bg-fuchsia-600 border-fuchsia-300"
@@ -59,10 +59,10 @@ export default function SecondPage({
         </div>
       </div>
       <div
-        className="flex bg-fuchsia-800 text-white font-bold px-4 py-2 mt-2 rounded-md justify-center items-center text-xl cursor-pointer"
+        className="flex bg-fuchsia-800 text-white hover:text-fuchsia-800  hover:bg-white hover:border-fuchsia-800 hover:border font-bold px-6 py-4 mt-2 rounded-md justify-center items-center text-xl cursor-pointer"
         onClick={handleButtonClick}
       >
-        <button>Start the game</button>
+        Start the game
       </div>
     </div>
   );

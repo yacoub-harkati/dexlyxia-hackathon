@@ -10,18 +10,24 @@ function App() {
   const [state, setState] = useState({
     childName: null,
     birthDay: null,
-    score: 0,
+    currentWord: "cat",
+    missingLetter: "c",
+    missingLetterPlaceHolder: "_",
+    mod: 0,
+    letterToChoose: ["a", "b", "c" ],
+    score: 5000,
     isMuted: false,
-    recording: false,
-    currentPage: 2,
+    currentPage: 3,
     theme: "max",
+    data: [
+      {word: "cat", image: "cat.png", sound: "cat.mp3", missingLetter: "c", mod: 0, letterToChoose: ["a", "b", "c" ]},
+    ]
   });
 
   function handleButtonClick() {
     if (state.childName !== null && state.birthDay !== null) {
-      if (state.currentPage == 3) {
-        setState({ ...state, currentPage: state.currentPage + 1 });
-        console.log(state);
+      if (state.currentPage >= 4) {b
+        setState({ ...state, currentPage: 0});
         return;
       }
       setState({ ...state, currentPage: state.currentPage + 1 });
@@ -43,7 +49,7 @@ function App() {
       }`}
     >
       {state.currentPage >= 2 && <Header state={state} setState={setState} />}
-      <Container>
+      <Container state={state}>
         {state.currentPage === 0 && (
           <FirstPage
             state={state}
