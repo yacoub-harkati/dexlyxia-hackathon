@@ -2,20 +2,56 @@ import sampleCatImage from "../assets/Sample.png";
 import { MdVolumeUp } from "react-icons/md";
 import LetterCard from "../components/LetterCard";
 import PlayLetter from "../components/PlayLetter";
+import axios from "axios";
+import greatjob from "../assets/sounds/greatjob.mp3";
+import tryagain from "../assets/sounds/sorry.mp3";
 
-export default function FourthPage({ state, setState }) {
-  function playCorrectWordSound(e) {}
-
-  function handleSuccess(word) {
-    console.log("Success", word);
+export default function FourthPage({ state, setState, initWord}) {
+  async function fetchWordSound(text) {
+    const { data } = await axios({
+      method: "post",
+      url: "http://10.126.77.235/api/game/textToSpeech/",
+      responseType: "arraybuffer",
+      data: { text: text },
+    });
+    const blob = new Blob([data], { type: "audio/mpeg" });
+    const url = URL.createObjectURL(blob);
+    return url;
   }
-  function handleFailure(word) {
-    console.log("Failure", word);
+  async function playCorrectWordSound(e = null) {
+    e?.preventDefault();
+	console.log("state.currentWord");
+    const url = await fetchWordSound(state.currentWord);
+    const audio = new Audio(url);
+    const success = new Audio(greatjob);
+    audio.play();
+    setTimeout(() => {
+      success.play();
+    }, 3000);
+  }
+
+  async function playWordSound(word) {
+    const url = await fetchWordSound(word);
+    const audio = new Audio(url);
+    audio.play();
+  }
+
+  async function handleSuccess() {
+    state.isMuted && playCorrectWordSound();
+    setState({ ...state, score: state.score + 10 });
+  }
+
+  async function handleFailure(word) {
+    state.isMuted && await playWordSound(word);
+    if (state.score > 0) setState({ ...state, score: state.score - 5 });
+    const failure = new Audio(tryagain);
+    setTimeout(() => {
+      failure.play();
+    }, 1000);
   }
 
   function handleOnDrop(e) {
     const letter = e.dataTransfer.getData("letter");
-    setState({ ...state, missingLetterPlaceHolder: letter });
     let word_to_process = state.currentWord.split("");
     let word_to_pronounce = null;
     if (state.mod === 0) {
@@ -30,6 +66,10 @@ export default function FourthPage({ state, setState }) {
     } else {
       handleFailure(word_to_pronounce);
     }
+    setState((prevState) => ({
+      ...prevState,
+      missingLetterPlaceHolder: letter,
+    }));
   }
   const colors = ["#F87171", "#FBBF24", "#34D399", "#60A5FA", "#A78BFA"];
   return (
@@ -39,7 +79,10 @@ export default function FourthPage({ state, setState }) {
       </h2>
       <div className="flex justify-center items-center rounded-lg gap-10">
         <div className="flex justify-center items-center gap-7 flex-col">
-          <div className="flex justify-center items-center rounded-lg bg-white h-[400px] w-[400px] cursor-pointer drop-shadow-lg p-20">
+          <div
+            className="flex justify-center items-center rounded-lg bg-white h-[400px] w-[400px] cursor-pointer drop-shadow-lg p-20"
+            onClick={playCorrectWordSound}
+          >
             <img
               src={sampleCatImage}
               alt="cat sample image"
@@ -81,7 +124,12 @@ export default function FourthPage({ state, setState }) {
                     letter={letter}
                     style={{ backgroundColor: colors[index] }}
                   />
-                  <PlayLetter key={index} letter={letter} className="" />
+                  <PlayLetter
+                    key={index}
+                    letter={letter}
+                    state={state}
+                    className=""
+                  />
                 </div>
               );
             })}

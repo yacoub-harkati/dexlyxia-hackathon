@@ -16,6 +16,7 @@ export default function LetterCard({
     e.preventDefault();
     e.stopPropagation();
   }
+
   return (
     <div
       style={style}

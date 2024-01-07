@@ -26,6 +26,9 @@ import w from "../assets/sounds/w.mp3";
 import x from "../assets/sounds/x.mp3";
 import y from "../assets/sounds/y.mp3";
 import z from "../assets/sounds/z.mp3";
+import greatjob from "../assets/sounds/greatjob.mp3";
+import tryagain from "../assets/sounds/sorry.mp3";
+import axios from "axios";
 
 const sounds = {
   a,
@@ -56,7 +59,7 @@ const sounds = {
   z,
 };
 
-export default function ThirdPage({ state, setState}) {
+export default function ThirdPage({ state, setState, handleButtonClick }) {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
   const mediaRecorderRef = useRef(null);
@@ -74,19 +77,54 @@ export default function ThirdPage({ state, setState}) {
         mediaRecorderRef.current = mediaRecorder;
         mediaRecorder.start();
 
-        mediaRecorder.ondataavailable = (e) => {
+        mediaRecorder.ondataavailable = async (e) => {
           const audioBlob = new Blob([e.data], { type: "audio/webm" });
           const audioUrl = URL.createObjectURL(audioBlob);
           setAudioUrl(audioUrl);
-        };
+          const audio = new Audio(audioUrl);
+          const formData = new FormData();
+          formData.append("audio", audioBlob, "audio.webm");
+          formData.append("game", 1);
+          formData.append("child", 1);
+          formData.append("expected_response", state.missingLetter);
 
+          audio.onloadedmetadata = async () => {
+            console.log(audio.duration);
+            formData.append("response_time", 3);
+
+            try {
+              const response = await axios.post(
+                "http://10.126.77.235/api/game/response/",
+                formData,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              );
+              console.log(response.data);
+            } catch (err) {
+              console.error("Error sending audio data", err);
+            }
+          };
+        };
         setIsRecording(true);
       } catch (err) {
         console.error("Error accessing your microphone", err);
       }
+
+      if (Math.floor(Math.random() * 3) !== 0) {
+        setTimeout(() => {
+          const audio = new Audio(greatjob);
+          audio.play();
+          handleButtonClick();
+        }, 3000);
+      } else {
+        const audio = new Audio(tryagain);
+        audio.play();
+      }
     }
   };
-
   return (
     <div>
       <div className="flex flex-col justify-center items-center gap-10">
@@ -96,7 +134,7 @@ export default function ThirdPage({ state, setState}) {
         <div
           className="flex justify-center items-center rounded-lg bg-white h-[300px] w-[300px] cursor-pointer drop-shadow-lg"
           onClick={() => {
-			const url = sounds[state.missingLetter.toLowerCase()];
+            const url = sounds[state.missingLetter.toLowerCase()];
             const audio = new Audio(url);
             audio.play();
           }}
@@ -113,7 +151,6 @@ export default function ThirdPage({ state, setState}) {
             <MdOutlineMicNone size={42} className="text-slate-800" />
           )}
         </div>
-        {audioUrl && <audio src={audioUrl} controls />}
       </div>
     </div>
   );

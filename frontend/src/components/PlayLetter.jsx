@@ -55,12 +55,12 @@ const sounds = {
   z,
 };
 
-export default function PlayLetter({ letter, className }) {
+export default function PlayLetter({ letter, className, state}) {
   const handlePlayLetter = (e) => {
     e.preventDefault();
     const sound = sounds[letter];
     const audio = new Audio(sound);
-    audio.play();
+    state.isMuted && audio.play();
   };
   return (
     <div

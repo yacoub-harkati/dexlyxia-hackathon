@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Container from "./components/Container";
 import FirstPage from "./Pages/firstPage";
 import SecondPage from "./Pages/secondPage";
@@ -14,20 +14,19 @@ function App() {
     missingLetter: "c",
     missingLetterPlaceHolder: "_",
     mod: 0,
-    letterToChoose: ["a", "b", "c" ],
-    score: 5000,
+    letterToChoose: ["a", "b", "c"],
+    score: 0,
     isMuted: false,
-    currentPage: 3,
+    currentPage: 0  ,
     theme: "max",
-    data: [
-      {word: "cat", image: "cat.png", sound: "cat.mp3", missingLetter: "c", mod: 0, letterToChoose: ["a", "b", "c" ]},
-    ]
+    data: [null],
   });
 
   function handleButtonClick() {
     if (state.childName !== null && state.birthDay !== null) {
-      if (state.currentPage >= 4) {b
-        setState({ ...state, currentPage: 0});
+      if (state.currentPage >= 4) {
+        b;
+        setState({ ...state, currentPage: 0 });
         return;
       }
       setState({ ...state, currentPage: state.currentPage + 1 });
