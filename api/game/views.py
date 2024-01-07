@@ -8,6 +8,7 @@ from child.models import Child
 from gtts import gTTS
 from django.http import HttpResponse
 from rest_framework import status
+import requests
 
 
 
@@ -56,7 +57,18 @@ class GameResponseView(APIView):
                     validated_data['is_correct'] = False
                     child.score -= 2
                 child.save()
-
+                if child.number_of_games is None:
+                    child.number_of_games = 1
+                elif child.number_of_games > 10:
+                    try:
+                        child.number_of_games = 0
+                        last_10_records = Game.objects.order_by('-id')[:10]
+                        records_list = list(last_10_records)
+                        response = requests.post('http://modelapi/modelapi', data={'data': records_list})
+                        child.level = response.json()['level'] or 1
+                        child.save()
+                    except Exception as e:
+                        print(e)
             # if serializer.is_valid():
             serializer.save(**validated_data)
             return Response({"is_correct": serializer.data['is_correct']})
