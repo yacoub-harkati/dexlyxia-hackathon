@@ -2,9 +2,13 @@ from django.shortcuts import render
 from rest_framework.views import APIView, Response
 from .serializers import GameSerializer, GemeResponseSerializer, CvcWordSerializer
 from .models import Game, GameResponse, CvcWord
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 import os
 from child.models import Child
+from gtts import gTTS
+from django.http import HttpResponse
+from rest_framework import status
+
 
 
 
@@ -69,3 +73,23 @@ class CvcView(APIView):
         cvc_words = CvcWord.objects.all()
         serializer = CvcWordSerializer(cvc_words, many=True)
         return Response(serializer.data)
+
+class TextToSpeechAPIView(APIView):
+    parser_classes = [JSONParser]
+
+    def post(self, request, *args, **kwargs):
+        text = request.data.get("text", "")
+
+        if not text or text == "":
+            return Response({"error": "No text provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        tts = gTTS(text)
+        # Save the audio file temporarily
+        tts.save("/tmp/speech.mp3")
+
+        response = None
+        with open("/tmp/speech.mp3", "rb") as audio_file:
+            response = HttpResponse(audio_file.read(), content_type="audio/mpeg")
+            response['Content-Disposition'] = 'attachment; filename="speech.mp3"'
+        os.remove("/tmp/speech.mp3")
+        return response

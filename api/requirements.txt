@@ -10,3 +10,5 @@ sqlparse==0.4.4
 Werkzeug==3.0.1
 djangorestframework==3.14.0
 pillow==10.2.0
+requests==2.31.0
+gTTS==2.5.0

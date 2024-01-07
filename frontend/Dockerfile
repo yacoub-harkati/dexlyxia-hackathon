@@ -2,11 +2,10 @@ FROM node:20
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm install -g vite
-RUN npm install
 COPY . .
+RUN npm install
+RUN npm install vite
+
 
 EXPOSE 3000
 
