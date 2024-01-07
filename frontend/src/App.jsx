@@ -13,12 +13,15 @@ function App() {
     currentWord: "cat",
     missingLetter: "c",
     missingLetterPlaceHolder: "_",
-    mod: 1,
+    mod: 0,
     letterToChoose: ["a", "b", "c" ],
     score: 5000,
     isMuted: false,
     currentPage: 3,
     theme: "max",
+    data: [
+      {word: "cat", image: "cat.png", sound: "cat.mp3", missingLetter: "c", mod: 0, letterToChoose: ["a", "b", "c" ]},
+    ]
   });
 
   function handleButtonClick() {
@@ -46,7 +49,7 @@ function App() {
       }`}
     >
       {state.currentPage >= 2 && <Header state={state} setState={setState} />}
-      <Container>
+      <Container state={state}>
         {state.currentPage === 0 && (
           <FirstPage
             state={state}

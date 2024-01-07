@@ -6,8 +6,12 @@ import PlayLetter from "../components/PlayLetter";
 export default function FourthPage({ state, setState }) {
   function playCorrectWordSound(e) {}
 
-  function handleSuccess(word) {}
-  function handleFailure(word) {}
+  function handleSuccess(word) {
+    console.log("Success", word);
+  }
+  function handleFailure(word) {
+    console.log("Failure", word);
+  }
 
   function handleOnDrop(e) {
     const letter = e.dataTransfer.getData("letter");
