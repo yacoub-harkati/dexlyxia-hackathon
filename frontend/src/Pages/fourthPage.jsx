@@ -5,9 +5,27 @@ import PlayLetter from "../components/PlayLetter";
 
 export default function FourthPage({ state, setState }) {
   function playCorrectWordSound(e) {}
+
+  function handleSuccess(word) {}
+  function handleFailure(word) {}
+
   function handleOnDrop(e) {
-	const letter = e.dataTransfer.getData("letter");
-	setState({ ...state, missingLetterPlaceHolder: letter });
+    const letter = e.dataTransfer.getData("letter");
+    setState({ ...state, missingLetterPlaceHolder: letter });
+    let word_to_process = state.currentWord.split("");
+    let word_to_pronounce = null;
+    if (state.mod === 0) {
+      word_to_process.shift();
+      word_to_pronounce = letter + word_to_process.join("");
+    } else {
+      word_to_process.pop();
+      word_to_pronounce = word_to_process.join("") + letter;
+    }
+    if (word_to_pronounce === state.currentWord) {
+      handleSuccess(word_to_pronounce);
+    } else {
+      handleFailure(word_to_pronounce);
+    }
   }
   const colors = ["#F87171", "#FBBF24", "#34D399", "#60A5FA", "#A78BFA"];
   return (

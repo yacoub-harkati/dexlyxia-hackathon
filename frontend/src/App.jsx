@@ -17,7 +17,7 @@ function App() {
     letterToChoose: ["a", "b", "c" ],
     score: 5000,
     isMuted: false,
-    currentPage: 2,
+    currentPage: 3,
     theme: "max",
   });
 
