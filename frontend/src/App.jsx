@@ -17,7 +17,7 @@ function App() {
     letterToChoose: ["a", "b", "c" ],
     score: 5000,
     isMuted: false,
-    currentPage: 3,
+    currentPage: 2,
     theme: "max",
     data: [
       {word: "cat", image: "cat.png", sound: "cat.mp3", missingLetter: "c", mod: 0, letterToChoose: ["a", "b", "c" ]},
