@@ -10,10 +10,15 @@ function App() {
   const [state, setState] = useState({
     childName: null,
     birthDay: null,
-    score: 0,
+    currentWord: "cat",
+    missingLetter: "c",
+    missingLetterPlaceHolder: "_",
+    mod: 1,
+    letterToChoose: ["a", "b", "c" ],
+    score: 5000,
     isMuted: false,
     recording: false,
-    currentPage: 2,
+    currentPage: 3,
     theme: "max",
   });
 
@@ -21,7 +26,6 @@ function App() {
     if (state.childName !== null && state.birthDay !== null) {
       if (state.currentPage == 3) {
         setState({ ...state, currentPage: state.currentPage + 1 });
-        console.log(state);
         return;
       }
       setState({ ...state, currentPage: state.currentPage + 1 });

@@ -10,7 +10,7 @@ export default function Header({ state, setState }) {
 	return (
 		<div className="w-full p-5">
 			<div className="flex gap-3 items-center justify-start">
-				<div className="bg-white rounded-full flex items-center space-x-3 min-w-28 px-4 py-2 h-14">
+				<div className="bg-white rounded-full flex items-center justify-center space-x-3 min-w-28 px-4 py-2 h-14">
 					<img src={Star} alt="star" className="inline-block h-7" />
 					<span className="inline-block font-semibold text-2xl">
 						{state.score}
