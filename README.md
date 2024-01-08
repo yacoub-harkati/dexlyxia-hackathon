@@ -11,7 +11,7 @@ Our goal was to develop AI-powered solutions that facilitate the conversion of t
 Our project employed a robust technology stack, combining the strengths of various tools and frameworks:
 
 - **Backend**: We utilized Django as our backend framework, creating a strong foundation for our application.
-- **Database**: PostgreSQL served as our database system, ensuring data integrity and reliability.
+- **Database**: SQLite served as our database system, ensuring data integrity and reliability.
 - **Docker & Nginx**: To containerize and deploy our application efficiently, we employed Docker with Nginx.
 - **Frontend**: Our user interface was built using React, offering a responsive and intuitive experience.
 - **UI Design**: We used Tailwind CSS for designing a user-friendly and accessible interface.
